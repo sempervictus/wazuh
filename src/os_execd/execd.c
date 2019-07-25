@@ -15,6 +15,7 @@
 #include "wazuh_modules/wmodules.h"
 #include "../external/cJSON/cJSON.h"
 #include "execd.h"
+#include "../config/config.h"
 
 int repeated_offenders_timeout[] = {0, 0, 0, 0, 0, 0, 0};
 time_t pending_upg = 0;
@@ -56,7 +57,7 @@ static void execd_shutdown(int sig)
 {
     /* Remove pending active responses */
     minfo(EXEC_SHUTDOWN);
- 
+
     timeout_node = timeout_list ? OSList_GetFirstNode(timeout_list) : NULL;
     while (timeout_node) {
         timeout_data *list_entry;
@@ -702,6 +703,10 @@ error:
 
     ret_val = 1;
     return ret_val;
+}
+
+int Test_Execd(const char * path) {
+    return ExecdConfig(path);
 }
 
 #endif /* !WIN32 */
