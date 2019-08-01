@@ -34,4 +34,6 @@ typedef struct _IntegratorConfig
     OSMatch *location;
 }IntegratorConfig;
 
+void free_integratord(IntegratorConfig **integrator_config);
+
 #endif
