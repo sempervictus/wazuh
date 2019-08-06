@@ -244,7 +244,10 @@ int verify_manager_conf(const char * path) {
     else if(Test_Execd(path) < 0) {
         return -1;
     }
-    else if(Test_Analysisd(path) < 0) {            // Test Global, Rules, Alerts, Cluster
+    else if(Test_ActiveResponse(path) < 0) {
+        return -1;
+    }
+    else if(Test_Analysisd(path) < 0) {            // Test Global, Rules, Alerts, Cluster, CLabels
         return -1;
     }
     else if(Test_Localfile(path) < 0) {            // Test Localfile and Socket
@@ -271,7 +274,6 @@ int verify_manager_conf(const char * path) {
     else if(Test_DBD(path) < 0) {
         return -1;
     }
-
 
     return 0;
 }
