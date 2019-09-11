@@ -2,7 +2,7 @@
  * Copyright (C) 2010 Trend Micro Inc.
  * All right reserved.
  *
- * This program is a free software; you can redistribute it
+ * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General Public
  * License (version 2) as published by the FSF - Free Software
  * Foundation
@@ -47,6 +47,10 @@ int main(int argc, char **argv)
 
     /* Set the name */
     OS_SetName(ARGV0);
+
+    printf("Verify-agent-conf has been deprecated. Use \"validator-config\" instead.");
+
+    return 1;
 
     /* User arguments */
     if (argc > 1) {
@@ -143,19 +147,21 @@ int main(int argc, char **argv)
 
 int verify_agent_conf(const char * path) {
 
-    if (Test_Syscheck(path) < 0) {
+    int type = CRMOTE_CONFIG;
+
+    if (Test_Syscheck(path, type) < 0) {
         return -1;
-    } else if (Test_Rootcheck(path) < 0) {
+    } else if (Test_Rootcheck(path, type) < 0) {
         return -1;
-    } else if (Test_Localfile(path) < 0) {
+    } else if (Test_Localfile(path, type) < 0) {
         return -1;
-    } else if (Test_Client(path) < 0) {
+    } else if (Test_Client(path, type) < 0) {
         return -1;
-    } else if (Test_ClientBuffer(path) < 0) {
+    } else if (Test_ClientBuffer(path, type) < 0) {
         return -1;
-    } else if (Test_WModule(path) < 0) {
+    } else if (Test_WModule(path, type) < 0) {
         return -1;
-    } else if (Test_Labels(path) < 0) {
+    } else if (Test_Labels(path, type) < 0) {
         return -1;
     }
 
