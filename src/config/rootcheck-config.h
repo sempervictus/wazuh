@@ -64,6 +64,6 @@ typedef struct _rkconfig {
 } rkconfig;
 
 /* Frees the Rootcheck struct  */
-void Free_Rootcheck(rkconfig * config);
+void Free_Rootcheck(rkconfig *config);
 
 #endif /* __CROOTCHECK_H */
