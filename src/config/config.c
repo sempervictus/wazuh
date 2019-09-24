@@ -405,7 +405,7 @@ int Test_Analysisd(const char *path) {
             fail = 1;
         }
 
-        if (test_config->max_output_size && (test_config->max_output_size < 1000000 || test_config->max_output_size > 1099511627776)) {
+        if (!fail && test_config->max_output_size && (test_config->max_output_size < 1000000 || test_config->max_output_size > 1099511627776)) {
             merror("Maximum output size must be between 1 MiB and 1 TiB.");
             fail = 1;
         }
@@ -415,7 +415,7 @@ int Test_Analysisd(const char *path) {
     config_free(test_config);
 
     if(fail) {
-        return -1;
+        return OS_INVALID;
     }
 
     return 0;
