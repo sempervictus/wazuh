@@ -67,6 +67,7 @@ typedef struct _logreader {
     char *djb_program_name;
     char *command;
     char *alias;
+    int reconnect_time;
     char future;
     char *query;
     int filter_binary;
