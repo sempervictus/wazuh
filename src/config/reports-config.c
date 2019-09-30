@@ -35,9 +35,10 @@ static int _filter_arg(char *mystr)
     return (1);
 }
 
-int Read_CReports(XML_NODE node, void *config, __attribute__((unused)) void *config2)
+int Read_CReports(XML_NODE node, void *config, __attribute__((unused)) void *config2, char **output)
 {
     unsigned int i = 0, s = 0;
+    char message[OS_FLSIZE];
 
     /* XML definitions */
     const char *xml_title = "title";
@@ -93,10 +94,21 @@ int Read_CReports(XML_NODE node, void *config, __attribute__((unused)) void *con
     /* Reading the XML */
     while (node[i]) {
         if (!node[i]->element) {
-            merror(XML_ELEMNULL);
+            if (output == NULL) {
+                merror(XML_ELEMNULL);
+            } else {
+                wm_strcat(output, "Invalid NULL element in the configuration.", '\n');
+            }
             return (OS_INVALID);
         } else if (!node[i]->content) {
-            merror(XML_VALUENULL, node[i]->element);
+            if (output == NULL) {
+                merror(XML_VALUENULL, node[i]->element);
+            } else {
+                snprintf(message, OS_FLSIZE + 1,
+                    "Invalid NULL content for element: %s.",
+                    node[i]->element);
+                wm_strcat(output, message, '\n');
+            }
             return (OS_INVALID);
         } else if (strcmp(node[i]->element, xml_title) == 0) {
             if (!mon_config->reports[s]->title) {
@@ -107,8 +119,13 @@ int Read_CReports(XML_NODE node, void *config, __attribute__((unused)) void *con
                 if (!mon_config->reports[s]->type) {
                     os_strdup(node[i]->content, mon_config->reports[s]->type);
                 }
-            } else {
+            } else if (output == NULL) {
                 merror(XML_VALUEERR, node[i]->element, node[i]->content);
+            } else {
+                snprintf(message, OS_FLSIZE + 1,
+                    "Invalid value for element '%s': %s.",
+                    node[i]->element, node[i]->content);
+                wm_strcat(output, message, '\n');
             }
         } else if (strcmp(node[i]->element, xml_frequency) == 0) {
         } else if (strcmp(node[i]->element, xml_showlogs) == 0) {
@@ -125,7 +142,11 @@ int Read_CReports(XML_NODE node, void *config, __attribute__((unused)) void *con
 
             if (result = os_report_configfilter("group", ncat,
                                        &mon_config->reports[s]->r_filter, REPORT_FILTER), result < 0) {
-                merror(CONFIG_ERROR, "user argument");
+                if (output == NULL) {
+                    merror(CONFIG_ERROR, "user argument");
+                } else {
+                    wm_strcat(output, "Configuration error at user argument.", '\n');
+                }
             }
 
             if (result < 0 || result == 1) {
@@ -147,13 +168,27 @@ int Read_CReports(XML_NODE node, void *config, __attribute__((unused)) void *con
                     if (strcmp(node[i]->attributes[0], "type") == 0) {
                         if (strcmp(node[i]->values[0], "relation") == 0) {
                             reportf = REPORT_RELATED;
-                        } else {
+                        } else if (output == NULL) {
                             mwarn("Invalid value for 'relation' attribute: '%s'. (ignored).", node[i]->values[0]);
                             i++;
                             continue;
+                        } else {
+                            snprintf(message, OS_FLSIZE + 1,
+                                "WARNING: Invalid value for 'relation' attribute: '%s'. (ignored).",
+                                node[i]->values[0]);
+                            wm_strcat(output, message, '\n');
+                            i++;
+                            continue;
                         }
-                    } else {
+                    } else if (output == NULL) {
                         mwarn("Invalid attribute: %s (ignored). ", node[i]->attributes[0]);
+                        i++;
+                        continue;
+                    } else {
+                        snprintf(message, OS_FLSIZE + 1,
+                            "WARNING: Invalid attribute: %s (ignored).",
+                            node[i]->attributes[0]);
+                        wm_strcat(output, message, '\n');
                         i++;
                         continue;
                     }
@@ -164,7 +199,14 @@ int Read_CReports(XML_NODE node, void *config, __attribute__((unused)) void *con
 
             if (result = os_report_configfilter(node[i]->element, ncat,
                                        &mon_config->reports[s]->r_filter, reportf), result < 0) {
-                merror("Invalid filter: %s:%s (ignored).", node[i]->element, node[i]->content);
+                if (output == NULL) {
+                    merror("Invalid filter: %s:%s (ignored).", node[i]->element, node[i]->content);
+                } else {
+                    snprintf(message, OS_FLSIZE + 1,
+                        "Invalid filter: %s:%s (ignored).",
+                        node[i]->element, node[i]->content);
+                    wm_strcat(output, message, '\n');
+                }
             }
 
             if (result < 0 || result == 1) {
@@ -172,8 +214,14 @@ int Read_CReports(XML_NODE node, void *config, __attribute__((unused)) void *con
             }
         } else if (strcmp(node[i]->element, xml_email) == 0) {
             mon_config->reports[s]->emailto = os_AddStrArray(node[i]->content, mon_config->reports[s]->emailto);
-        } else {
+        } else if (output == NULL) {
             merror(XML_INVELEM, node[i]->element);
+            return (OS_INVALID);
+        } else {
+            snprintf(message, OS_FLSIZE + 1,
+                "Invalid element in the configuration: '%s'.",
+                node[i]->element);
+            wm_strcat(output, message, '\n');
             return (OS_INVALID);
         }
         i++;
@@ -184,9 +232,21 @@ int Read_CReports(XML_NODE node, void *config, __attribute__((unused)) void *con
 
     if (mon_config->reports[s]->emailto == NULL) {
         if (mon_config->reports[s]->title) {
-            merror("No \"email to\" configured for the report '%s'. Ignoring it.", mon_config->reports[s]->title);
-        } else {
+            if (output == NULL) {
+                merror("No \"email to\" configured for the report '%s'. Ignoring it.", mon_config->reports[s]->title);
+            } else {
+                snprintf(message, OS_FLSIZE + 1,
+                    "No \"email to\" configured for the report '%s'. Ignoring it.",
+                     mon_config->reports[s]->title);
+                wm_strcat(output, message, '\n');
+            }
+        } else if (output == NULL) {
             merror("No \"email to\" and title configured for report. Ignoring it.");
+        } else {
+            snprintf(message, OS_FLSIZE + 1,
+                "No \"email to\" and title configured for report. Ignoring it.",
+                 mon_config->reports[s]->title);
+            wm_strcat(output, message, '\n');
         }
     }
 
