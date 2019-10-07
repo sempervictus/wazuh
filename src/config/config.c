@@ -31,6 +31,7 @@ static int read_main_elements(const OS_XML *xml, int modules,
                               char **output)
 {
     int i = 0;
+    char message[OS_FLSIZE];
     const char *osglobal = "global";                    /* Server Config */
     const char *osrules = "ruleset";                    /* Server Config */
     const char *ossyscheck = "syscheck";                /* Agent Config  */
@@ -66,7 +67,7 @@ static int read_main_elements(const OS_XML *xml, int modules,
             if (output == NULL){
                 merror(XML_ELEMNULL);                    
             } else {
-                wm_strcat(output, " Invalid NULL element in the configuration", '\n');
+                wm_strcat(output, "Invalid NULL element in the configuration", '\n');
             }
             goto fail;
         }
@@ -184,7 +185,8 @@ static int read_main_elements(const OS_XML *xml, int modules,
             goto fail;
         } else {
             char message[OS_FLSIZE];
-            snprintf(message, OS_FLSIZE + 1, "Invalid element in the configuration: '%s'.", node[i]->element);
+            snprintf(message, OS_FLSIZE + 1,
+                "Invalid element in the configuration: '%s'.", node[i]->element);
             wm_strcat(output, message, '\n');
             goto fail;
         }
@@ -208,6 +210,7 @@ int ReadConfig(int modules, const char *cfgfile, void *d1, void *d2, char **outp
     int i;
     OS_XML xml;
     XML_NODE node;
+    char message[OS_FLSIZE];
 
     /** XML definitions **/
     /* Global */
@@ -230,16 +233,16 @@ int ReadConfig(int modules, const char *cfgfile, void *d1, void *d2, char **outp
             if (output == NULL){
                 merror(XML_ERROR, cfgfile, xml.err, xml.err_line);
             } else {
-                char message[OS_FLSIZE];
-                snprintf(message, OS_FLSIZE + 1, "Error reading XML file '%s': %s (line %d).", cfgfile, xml.err, xml.err_line);
+                snprintf(message, OS_FLSIZE + 1,
+                    "Error reading XML file '%s': %s (line %d).", cfgfile, xml.err, xml.err_line);
                 wm_strcat(output, message, '\n');
             }
 #endif
         } else if (output == NULL){
             merror(XML_ERROR, cfgfile, xml.err, xml.err_line);
         } else {
-            char message[OS_FLSIZE];
-            snprintf(message, OS_FLSIZE + 1, "Error reading XML file '%s': %s (line %d).", cfgfile, xml.err, xml.err_line);
+            snprintf(message, OS_FLSIZE + 1,
+                "Error reading XML file '%s': %s (line %d).", cfgfile, xml.err, xml.err_line);
             wm_strcat(output, message, '\n');
         }
         return (OS_INVALID);
@@ -273,8 +276,8 @@ int ReadConfig(int modules, const char *cfgfile, void *d1, void *d2, char **outp
                     if (output == NULL){
                         merror(CONFIG_ERROR, cfgfile);
                     } else {
-                        char message[OS_FLSIZE];
-                        snprintf(message, OS_FLSIZE + 1, "Configuration error at '%s'.", cfgfile);
+                        snprintf(message, OS_FLSIZE + 1,
+                            "Configuration error at '%s'.", cfgfile);
                         wm_strcat(output, message, '\n');
                     }
                     OS_ClearNode(chld_node);
@@ -312,9 +315,9 @@ int ReadConfig(int modules, const char *cfgfile, void *d1, void *d2, char **outp
                             if (output == NULL){
                                 mwarn("Agent name filter (%d bytes) exceeds the limit (%d)", attrlen, OS_PATTERN_MAXSIZE);
                             } else {
-                                char message[OS_FLSIZE];
-                                snprintf(message, OS_FLSIZE + 1, "WARNING: Agent name filter (%d bytes) exceeds the limit (%d)", 
-                                        attrlen, OS_PATTERN_MAXSIZE);
+                                snprintf(message, OS_FLSIZE + 1
+                                    "WARNING: Agent name filter (%d bytes) exceeds the limit (%d)", 
+                                    attrlen, OS_PATTERN_MAXSIZE);
                                 wm_strcat(output, message, '\n');
                             }
                             passed_agent_test = 0;
@@ -342,9 +345,9 @@ int ReadConfig(int modules, const char *cfgfile, void *d1, void *d2, char **outp
                             if (output = NULL){
                                 mwarn("Agent OS filter (%d bytes) exceeds the limit (%d)", attrlen, OS_PATTERN_MAXSIZE);
                             } else {
-                                char message[OS_FLSIZE];
-                                snprintf(message, OS_FLSIZE + 1, "WARNING: Agent OS filter (%d bytes) exceeds the limit (%d)", 
-                                        attrlen, OS_PATTERN_MAXSIZE);
+                                snprintf(message, OS_FLSIZE + 1,
+                                    "WARNING: Agent OS filter (%d bytes) exceeds the limit (%d)", 
+                                    attrlen, OS_PATTERN_MAXSIZE);
                                 wm_strcat(output, message, '\n');
                             }
                             passed_agent_test = 0;
@@ -368,9 +371,9 @@ int ReadConfig(int modules, const char *cfgfile, void *d1, void *d2, char **outp
                             if (output == NULL){
                                 mwarn("Agent profile filter (%d bytes) exceeds the limit (%d)", attrlen, OS_PATTERN_MAXSIZE);
                             } else {
-                                char message[OS_FLSIZE];
-                                snprintf(message, OS_FLSIZE + 1, "WARNING: Agent profile filter (%d bytes) exceeds the limit (%d)", 
-                                        attrlen, OS_PATTERN_MAXSIZE);
+                                snprintf(message, OS_FLSIZE + 1,
+                                    "WARNING: Agent profile filter (%d bytes) exceeds the limit (%d)", 
+                                    attrlen, OS_PATTERN_MAXSIZE);
                                 wm_strcat(output, message, '\n');
                             }
                             passed_agent_test = 0;
@@ -397,8 +400,8 @@ int ReadConfig(int modules, const char *cfgfile, void *d1, void *d2, char **outp
                         if (output == NULL){
                             merror(XML_INVATTR, node[i]->attributes[attrs], cfgfile);
                         } else {
-                            char message[OS_FLSIZE];
-                            snprintf(message, OS_FLSIZE + 1, "Configuration error at '%s'.", cfgfile);
+                            snprintf(message, OS_FLSIZE + 1,
+                                "Configuration error at '%s'.", cfgfile);
                             wm_strcat(output, message, '\n');
                         }
 #ifndef CLIENT
@@ -441,8 +444,8 @@ int ReadConfig(int modules, const char *cfgfile, void *d1, void *d2, char **outp
                     if (output == NULL){
                         merror(CONFIG_ERROR, cfgfile);
                     } else {
-                        char message[OS_FLSIZE];
-                        snprintf(message, OS_FLSIZE + 1, "Configuration error at '%s'.", cfgfile);
+                        snprintf(message, OS_FLSIZE + 1,
+                            "Configuration error at '%s'.", cfgfile);
                         wm_strcat(output, message, '\n');
                     }
                     OS_ClearNode(chld_node);
@@ -457,8 +460,9 @@ int ReadConfig(int modules, const char *cfgfile, void *d1, void *d2, char **outp
             if (output == NULL){
                 merror(XML_INVELEM, node[i]->element);
             } else {
-                char message[OS_FLSIZE];
-                snprintf(message, OS_FLSIZE + 1, "Invalid elemente in the configuration: '%s'.", node[i]->element);
+                snprintf(message, OS_FLSIZE + 1,
+                    "Invalid elemente in the configuration: '%s'.",
+                    node[i]->element);
                 wm_strcat(output, message, '\n');
             } 
             OS_ClearNode(node);

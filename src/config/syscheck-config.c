@@ -1166,7 +1166,8 @@ int Read_Syscheck(const OS_XML *xml, XML_NODE node, void *configp, __attribute__
                             free(tag);
                             return OS_INVALID;
                         } else {
-                            snprintf(message, OS_FLSIZE + 1, "Invalid attribute '%s' in the configuration: '%s'.",
+                            snprintf(message, OS_FLSIZE + 1,
+                                "Invalid attribute '%s' in the configuration: '%s'.",
                                 node[i]->attributes[j], node[i]->content);
                             wm_strcat(output, message, '\n');
                             free(tag);
@@ -1177,7 +1178,8 @@ int Read_Syscheck(const OS_XML *xml, XML_NODE node, void *configp, __attribute__
                         free(tag);
                         return OS_INVALID;
                     } else {
-                        snprintf(message, OS_FLSIZE + 1, "Invalid attribute '%s' in the configuration: '%s'.",
+                        snprintf(message, OS_FLSIZE + 1,
+                            "Invalid attribute '%s' in the configuration: '%s'.",
                             node[i]->attributes[j], node[i]->content);
                         wm_strcat(output, message, '\n');
                         free(tag);
@@ -1219,7 +1221,8 @@ int Read_Syscheck(const OS_XML *xml, XML_NODE node, void *configp, __attribute__
                 if (output == NULL) {
                     merror(XML_VALUEERR, node[i]->element, node[i]->content);
                 } else {
-                    snprintf(message, OS_FLSIZE + 1, "Invalid value for element '%s': '%s'.",
+                    snprintf(message, OS_FLSIZE + 1,
+                        "Invalid value for element '%s': '%s'.",
                         node[i]->element, node[i]->content);
                     wm_strcat(output, message, '\n');
                 }
@@ -1235,7 +1238,8 @@ int Read_Syscheck(const OS_XML *xml, XML_NODE node, void *configp, __attribute__
                 if (output == NULL) {
                     merror(XML_VALUEERR, node[i]->element, node[i]->content);
                 } else {
-                    snprintf(message, OS_FLSIZE + 1, "Invalid value for element '%s': '%s'.",
+                    snprintf(message, OS_FLSIZE + 1,
+                        "Invalid value for element '%s': '%s'.",
                         node[i]->element, node[i]->content);
                     wm_strcat(output, message, '\n');
                 }
@@ -1251,7 +1255,8 @@ int Read_Syscheck(const OS_XML *xml, XML_NODE node, void *configp, __attribute__
                 if (output == NULL) {
                     merror(XML_VALUEERR, node[i]->element, node[i]->content);
                 } else {
-                    snprintf(message, OS_FLSIZE + 1, "Invalid value for element '%s': '%s'.",
+                    snprintf(message, OS_FLSIZE + 1,
+                        "Invalid value for element '%s': '%s'.",
                         node[i]->element, node[i]->content);
                     wm_strcat(output, message, '\n');
                 }
@@ -1266,7 +1271,8 @@ int Read_Syscheck(const OS_XML *xml, XML_NODE node, void *configp, __attribute__
                 if (output == NULL) {
                     merror(XML_VALUEERR, node[i]->element, node[i]->content);
                 } else {
-                    snprintf(message, OS_FLSIZE + 1, "Invalid value for element '%s': '%s'.",
+                    snprintf(message, OS_FLSIZE + 1,
+                        "Invalid value for element '%s': '%s'.",
                         node[i]->element, node[i]->content);
                     wm_strcat(output, message, '\n');
                 }
@@ -1284,7 +1290,8 @@ int Read_Syscheck(const OS_XML *xml, XML_NODE node, void *configp, __attribute__
                 merror(XML_VALUEERR, node[i]->element, node[i]->content);
                 return (OS_INVALID);
             } else {
-                snprintf(message, OS_FLSIZE + 1, "Invalid value for element '%s': '%s'.",
+                snprintf(message, OS_FLSIZE + 1,
+                    "Invalid value for element '%s': '%s'.",
                     node[i]->element, node[i]->content);
                 wm_strcat(output, message, '\n');
                 return (OS_INVALID);
@@ -1301,7 +1308,8 @@ int Read_Syscheck(const OS_XML *xml, XML_NODE node, void *configp, __attribute__
                 merror(XML_VALUEERR, node[i]->element, node[i]->content);
                 return (OS_INVALID);
             } else {
-                snprintf(message, OS_FLSIZE + 1, "Invalid value for element '%s': '%s'.",
+                snprintf(message, OS_FLSIZE + 1,
+                    "Invalid value for element '%s': '%s'.",
                     node[i]->element, node[i]->content);
                 wm_strcat(output, message, '\n');
                 return (OS_INVALID);
@@ -1321,7 +1329,8 @@ int Read_Syscheck(const OS_XML *xml, XML_NODE node, void *configp, __attribute__
                     merror(XML_VALUEERR, node[i]->element, node[i]->content);
                     return (OS_INVALID);
                 } else {
-                    snprintf(message, OS_FLSIZE + 1, "Invalid value for element '%s': '%s'.",
+                    snprintf(message, OS_FLSIZE + 1,
+                        "Invalid value for element '%s': '%s'.",
                         node[i]->element, node[i]->content);
                     wm_strcat(output, message, '\n');
                     return (OS_INVALID);
