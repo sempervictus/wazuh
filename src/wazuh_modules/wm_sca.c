@@ -1830,7 +1830,17 @@ static int wm_sca_is_process(char *value, OSList *p_list)
 }
 
 // Destroy data
-void wm_sca_destroy(wm_sca_t * data) {
+void wm_sca_destroy(wm_sca_t *data) {
+
+    int i;
+    if (data->profile){
+        for (i=0; data->profile[i]; i++){
+            os_free(data->profile[i]->profile);
+            os_free(data->profile[i]->policy_id);
+            os_free(data->profile[i]);
+        }
+        os_free(data->profile);
+    }
     os_free(data);
 }
 

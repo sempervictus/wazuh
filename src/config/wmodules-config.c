@@ -56,10 +56,12 @@ int Read_WModule(const OS_XML *xml, xml_node *node, void *d1, void *d2, int cfg_
 
         while (cur_wmodule_exists) {
             if(cur_wmodule_exists->tag) {
-                if(strcmp(cur_wmodule_exists->tag,node->values[0]) == 0) {
-                    cur_wmodule = cur_wmodule_exists;
-                    found = 1;
-                    break;
+                if (!output) {
+                    if(strcmp(cur_wmodule_exists->tag,node->values[0]) == 0) {
+                        cur_wmodule = cur_wmodule_exists;
+                        found = 1;
+                        break;
+                    }
                 }
             }
             cur_wmodule_exists = cur_wmodule_exists->next;
@@ -219,15 +221,15 @@ int Read_WModule(const OS_XML *xml, xml_node *node, void *d1, void *d2, int cfg_
             type_str = cfg_type == CAGENT_CGFILE ? strdup("agent") : (cfg_type == CRMOTE_CONFIG ? strdup("remote") : strdup("manager"));
             if (output == NULL) {
                 merror("Unknown module '%s' for the %s configuration file.", node->values[0], type_str);
-                return OS_INVALID;
             } else {
                 snprintf(message, OS_FLSIZE + 1,
                     "Unknown module '%s' for the %s configuration file.",
                     node->values[0], type_str);
                 wm_strcat(output, message, '\n');
-                return OS_INVALID;
             }
             os_free(type_str);
+            OS_ClearNode(children);
+            return OS_INVALID;
         }
     }
 
@@ -250,10 +252,12 @@ int Read_SCA(const OS_XML *xml, xml_node *node, void *d1, char **output)
 
         while (cur_wmodule_exists) {
             if(cur_wmodule_exists->tag) {
-                if(strcmp(cur_wmodule_exists->tag,node->element) == 0) {
-                    cur_wmodule = cur_wmodule_exists;
-                    found = 1;
-                    break;
+                if (!output) {
+                    if(strcmp(cur_wmodule_exists->tag,node->element) == 0) {
+                        cur_wmodule = cur_wmodule_exists;
+                        found = 1;
+                        break;
+                    }
                 }
             }
             cur_wmodule_exists = cur_wmodule_exists->next;
@@ -316,10 +320,12 @@ int Read_Fluent_Forwarder(const OS_XML *xml, xml_node *node, void *d1, char **ou
 
         while (cur_wmodule_exists) {
             if(cur_wmodule_exists->tag) {
-                if(strcmp(cur_wmodule_exists->tag,node->element) == 0) {
-                    cur_wmodule = cur_wmodule_exists;
-                    found = 1;
-                    break;
+                if (!output) {
+                    if(strcmp(cur_wmodule_exists->tag,node->element) == 0) {
+                        cur_wmodule = cur_wmodule_exists;
+                        found = 1;
+                        break;
+                    }
                 }
             }
             cur_wmodule_exists = cur_wmodule_exists->next;

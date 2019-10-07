@@ -58,7 +58,7 @@ int wm_sca_read(const OS_XML *xml,xml_node **nodes, wmodule *module, char **outp
     if (!nodes)
         return 0;
 
-    if(!sca->alert_msg) {
+    if((!sca->alert_msg) && !(output)) {
         /* We store up to 255 alerts in there */
         os_calloc(256, sizeof(char *), sca->alert_msg);
         int c = 0;

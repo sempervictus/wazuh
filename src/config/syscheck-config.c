@@ -1840,6 +1840,7 @@ void Free_Syscheck(syscheck_config *config) {
         if (config->ignore_regex) {
             for (i=0; config->ignore_regex[i] != NULL; i++) {
                 OSMatch_FreePattern(config->ignore_regex[i]);
+                free(config->ignore_regex[i]);
             }
             free(config->ignore_regex);
         }
@@ -1848,6 +1849,12 @@ void Free_Syscheck(syscheck_config *config) {
                 free(config->nodiff[i]);
             }
             free(config->nodiff);
+        }
+        if (config->converted_links) {
+            for (i=0; config->converted_links[i] != NULL; i++) {
+                free(config->converted_links[i]);
+            }
+            free(config->converted_links);
         }
         if (config->nodiff_regex) {
             for (i=0; config->nodiff_regex[i] != NULL; i++) {
@@ -1868,6 +1875,7 @@ void Free_Syscheck(syscheck_config *config) {
             free(config->dir);
             free(config->filerestrict);
             free(config->tag);
+            free(config->recursion_level);
         }
 
     #ifdef WIN32
