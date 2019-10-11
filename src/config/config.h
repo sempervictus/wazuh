@@ -75,7 +75,7 @@ int Read_Fluent_Forwarder(const OS_XML *xml, xml_node *node, void *d1, char **ou
 #endif
 int Read_Labels(XML_NODE node, void *d1, void *d2, char **output);
 int Read_Authd(XML_NODE node, void *d1, void *d2, char **output);
-int Read_Cluster(XML_NODE node, void *d1, void *d2, char **output);
+int Read_Cluster(const OS_XML *xml, XML_NODE node, void *d1, void *d2, char **output);
 int Read_Socket(XML_NODE node, void *d1, void *d2, char **output);
 
 /* Verifies that the configuration for Syscheck is correct. Return 0 on success or -1 on error.  */
