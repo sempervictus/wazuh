@@ -2573,3 +2573,29 @@ class Agent:
             raise WazuhException(1710)
 
         return configuration.upload_group_file(group_id, tmp_file, file_name)
+
+    @staticmethod
+    def validate_configuration(tmp_file):
+        """Validate an agent configuration from a temporary file.
+
+        :param tmp_file: Relative path of the configuration which will be validated
+        :return: Evaluation of agent configuration
+        """
+        tmp_file_full_path = path.join(common.ossec_path, tmp_file)
+        # check that the file exists
+        if not path.exists(tmp_file_full_path):
+            raise WazuhException(1906)
+
+        try:
+            # call to file validator
+            response = '{"error": "0", "data": [{"type": "WARNING", "message": "The \'vulnerability-detector\' module ' \
+                       'only works for the manager"}, {"type": "INFO", "message": "WPK verification with CA is disabled"}]}'
+            result = loads(response)
+        finally:
+            # delete temporary file
+            try:
+                remove(tmp_file_full_path)
+            except OSError:
+                raise WazuhException(1903)
+
+        return result
